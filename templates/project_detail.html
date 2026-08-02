@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Project Detail{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/project_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- TOPBAR -->
+<div class="topbar">
+
+    <h2 class="title">Project Detail</h2>
+
+    <div class="top-icons">
+
+        <span class="bell" onclick="window.location.href='{% url 'notification' %}'">
+            🔔
+            {% if unread_count > 0 %}
+                <small>{{ unread_count }}</small>
+            {% endif %}
+        </span>
+
+        <a href="{% url 'profile' %}">
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="Profile">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" alt="Profile">
+            {% endif %}
+        </a>
+
+    </div>
+
+</div>
+
+<!-- HEADER -->
+<div class="header">
+
+    <div>
+        <h1>{{ project.project_name }}</h1>
+        <p class="sub-text">Project Details Overview</p>
+    </div>
+
+    <div>
+        <a href="{% url 'edit_project' project.id %}">
+            <button>Edit</button>
+        </a>
+
+        <button class="btn-share" onclick="openShare()">Share</button>
+    </div>
+
+</div>
+
+<!-- DESCRIPTION -->
+<div class="section">
+    <h3>Description</h3>
+
+    <div class="box">
+        {% if project.project_description %}
+            <p>{{ project.project_description }}</p>
+        {% else %}
+            <p class="empty-text">No description added yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- FILE -->
+<div class="section">
+    <h3>File</h3>
+
+    <div class="box file-main">
+
+        {% if project.project_file %}
+
+            <p class="file-name">📎 {{ project.project_file.name }}</p>
+
+            <small class="file-size">
+                {{ project.project_file.size|filesizeformat }}
+            </small>
+
+            <div class="file-bottom">
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="new_file" id="fileInputReplace" hidden>
+
+                    <button type="button"
+                            class="replace-btn"
+                            onclick="document.getElementById('fileInputReplace').click()">
+                        🔄 Replace
+                    </button>
+                </form>
+
+                <div class="file-actions-right">
+                    <a href="{{ project.project_file.url }}" target="_blank">Preview</a>
+                    <a href="{{ project.project_file.url }}" download>Download</a>
+                    <a href="{% url 'delete_file' project.id %}"
+                       onclick="return confirm('Delete file?')">Delete</a>
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <div class="upload-empty"
+                 onclick="document.getElementById('fileInputUpload').click()">
+                📂 No file uploaded <br>
+                <small>Click to upload</small>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="new_file" id="fileInputUpload" hidden>
+            </form>
+
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="section">
+    <h3>Project Timeline</h3>
+
+    <div class="box dates">
+        <span>📅 Start: {{ project.start_date }}</span>
+        <span>📅 End: {{ project.end_date }}</span>
+    </div>
+</div>
+
+<!-- SHARE POPUP -->
+<div id="sharePopup" class="share-popup">
+
+    <div class="share-box">
+
+        <h3>Share Project</h3>
+
+        <input type="text"
+               id="shareLink"
+               value="http://127.0.0.1:8000/project/{{ project.id }}/"
+               readonly>
+
+        <div class="share-actions">
+            <button onclick="copyLink()">Copy</button>
+            <button onclick="closeShare()">Close</button>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openShare() {
+    document.getElementById("sharePopup").style.display = "flex";
+}
+
+function closeShare() {
+    document.getElementById("sharePopup").style.display = "none";
+}
+
+function copyLink() {
+    let input = document.getElementById("shareLink");
+    input.select();
+    document.execCommand("copy");
+    alert("Link copied!");
+}
+</script>
+{% endblock %}

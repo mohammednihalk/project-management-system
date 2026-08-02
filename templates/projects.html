@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Topbar -->
+<div class="topbar">
+    <h1>
+        {% if status %}
+            {{ status|title }} Projects
+        {% else %}
+            All Projects
+        {% endif %}
+    </h1>
+
+    <div class="top-icons">
+        <span class="bell"
+              onclick="window.location.href='{% url 'notification' %}'">
+            🔔
+            {% if unread_count > 0 %}
+                <small>{{ unread_count }}</small>
+            {% endif %}
+        </span>
+
+        <img
+            src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
+            alt="Profile">
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="header-row">
+
+    <div class="tabs">
+        <a href="{% url 'project' %}"
+           class="{% if not status %}active{% endif %}">
+            All
+        </a>
+
+        <a href="?status=active"
+           class="{% if status == 'active' %}active{% endif %}">
+            Active
+        </a>
+
+        <a href="?status=in_progress"
+           class="{% if status == 'in_progress' %}active{% endif %}">
+            In Progress
+        </a>
+
+        <a href="?status=completed"
+           class="{% if status == 'completed' %}active{% endif %}">
+            Completed
+        </a>
+
+        <a href="?status=archived"
+           class="{% if status == 'archived' %}active{% endif %}">
+            Archived
+        </a>
+
+        <a href="?status=overdue"
+           class="{% if status == 'overdue' %}active{% endif %}">
+            Overdue
+        </a>
+    </div>
+
+    <div class="actions">
+        <input type="text" placeholder="Search projects...">
+
+        <a href="{% url 'CreateNewPage' %}">
+            <button>Create Project</button>
+        </a>
+    </div>
+
+</div>
+
+<!-- Project Grid -->
+<div class="grid">
+
+    {% for project in projects %}
+
+    <div class="card"
+         onclick="window.location.href='{% url 'project_detail' project.id %}'">
+
+        <!-- Status -->
+        <span class="badge
+            {% if project.status == 'active' %}green
+            {% elif project.status == 'in_progress' %}yellow
+            {% elif project.status == 'completed' %}blue
+            {% else %}red
+            {% endif %}">
+            {{ project.get_status_display }}
+        </span>
+
+        <!-- Project Name -->
+        <h3>{{ project.project_name }}</h3>
+
+        <!-- End Date -->
+        <div class="date">
+            📅 {{ project.end_date }}
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-btns"
+             onclick="event.stopPropagation();">
+
+            <a href="{% url 'update_status' project.id 'in_progress' %}">
+                <button>Start</button>
+            </a>
+
+            <a href="{% url 'update_status' project.id 'completed' %}">
+                <button>Complete</button>
+            </a>
+
+            <a href="{% url 'update_status' project.id 'archived' %}">
+                <button>Archive</button>
+            </a>
+
+            <a href="{% url 'delete_project' project.id %}"
+               onclick="return confirm('Are you sure you want to delete this project?')">
+                <button class="btn-delete">
+                    Delete
+                </button>
+            </a>
+
+        </div>
+    </div>
+
+    {% empty %}
+
+    <p class="empty-state">
+        No projects found.
+    </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+```

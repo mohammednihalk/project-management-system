@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/DSBoard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+
+    <h1 class="dashboard-title">Dashboard</h1>
+
+    <div class="top-icons">
+
+        <span class="bell" onclick="window.location.href='{% url 'notification' %}'">
+            🔔
+            {% if unread_count > 0 %}
+                <small>{{ unread_count }}</small>
+            {% endif %}
+        </span>
+
+        <a href="{% url 'profile' %}">
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="Profile">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" alt="Profile">
+            {% endif %}
+        </a>
+
+    </div>
+
+</div>
+
+<div id="aiToast" class="ai-toast"></div>
+
+<div class="row g-4 mt-1">
+
+    <div class="col-md-3">
+        <a href="{% url 'project' %}?status=active">
+            <div class="dashboard-card bg-success text-white p-3">
+                <h5>Active</h5>
+                <h2>{{ active }}</h2>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'project' %}?status=completed">
+            <div class="dashboard-card bg-primary text-white p-3">
+                <h5>Completed</h5>
+                <h2>{{ completed }}</h2>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'project' %}?status=in_progress">
+            <div class="dashboard-card bg-warning text-dark p-3">
+                <h5>In Progress</h5>
+                <h2>{{ in_progress }}</h2>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'project' %}?status=overdue">
+            <div class="dashboard-card bg-danger text-white p-3">
+                <h5>Overdue</h5>
+                <h2>{{ overdue }}</h2>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="chart-box p-3 h-100">
+
+            <h5>Projects by Status</h5>
+
+            {% if total_projects == 0 %}
+                <div style="text-align:center; margin-top:60px; color:#9ca3af;">
+                    <h5>🚫 No projects found</h5>
+                    <p>Create your first project to see analytics</p>
+                </div>
+            {% else %}
+                <canvas id="statusChart"></canvas>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="chart-box p-3 h-100">
+
+            <h5>Projects by Types</h5>
+
+            {% if total_projects == 0 %}
+                <p style="text-align:center; color:#9ca3af;">No data</p>
+            {% else %}
+                <canvas id="typeChart"></canvas>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="ai-box p-3 h-100">
+
+            <h6>🤖 AI Insights</h6>
+
+            <ul class="insight-list">
+
+                {% for type, text in insights %}
+
+                <li class="insight-item {{ type }} {% if forloop.first %}top-insight{% endif %}"
+                    onclick="handleInsightClick('{{ type }}', '{% url 'project' %}', '{% url 'calendarpage' %}')">
+
+                    <div class="icon">
+
+                        {% if type == "danger" %}
+                            ⚠️
+                        {% elif type == "progress" %}
+                            🔄
+                        {% elif type == "success" %}
+                            ✅
+                        {% elif type == "warning" %}
+                            🔥
+                        {% else %}
+                            💡
+                        {% endif %}
+
+                    </div>
+
+                    <div class="text">
+                        {{ text }}
+                    </div>
+
+                </li>
+
+                {% empty %}
+
+                <li>No insights available</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="welcome-box mt-4 p-5">
+
+    <h4>Welcome to Dashboard</h4>
+
+    <p>
+        Manage projects, track tasks, and stay organized with real-time insights.
+        Stay productive and monitor your workflow all in one place.
+    </p>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+const chartData = {
+    active: {{ active }},
+    in_progress: {{ in_progress }},
+    completed: {{ completed }},
+    overdue: {{ overdue }}
+};
+
+const barData = {
+    labels: JSON.parse('{{ months|escapejs }}'),
+    counts: JSON.parse('{{ counts|escapejs }}')
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/DSBoard.js' %}"></script>
+
+{% endblock %}

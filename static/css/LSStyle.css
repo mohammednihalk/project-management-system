@@ -1,0 +1,171 @@
+/*  RESET  */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    background: #020617;
+}
+
+/*  NAVBAR  */
+.navbar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 30px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+/* RIGHT SIDE */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* NAV LINKS */
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+
+    transition: all 0.3s ease;
+}
+
+/* LOGIN HOVER */
+.navbar a:hover {
+    color: #3b82f6;
+}
+
+/* SIGNUP BUTTON */
+.btn-nav {
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 20px;
+
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* SIGNUP HOVER */
+.btn-nav:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5);
+}
+
+/* CLICK EFFECT */
+.btn-nav:active {
+    transform: scale(0.95);
+}
+
+/* GLOW EFFECT */
+.btn-nav::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    opacity: 0.3;
+
+    filter: blur(10px);
+    z-index: -1;
+}
+
+/*  HERO SECTION  */
+.hero {
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 80px;
+
+    background:
+        linear-gradient(to right, rgba(2,6,23,0.9), rgba(2,6,23,0.6)),
+        url("../img/image.png");
+
+    background-size: cover;
+    background-position: center;
+}
+
+/*  HERO TEXT  */
+.hero-content {
+    max-width: 500px;
+}
+
+.hero-content h1 {
+    font-size: 30px;
+     text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.hero-content p {
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+
+/*  BUTTONS  */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    padding: 14px 28px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    margin-right: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(59,130,246,0.6);
+}
+
+.btn-primary:active {
+    transform: scale(0.96);
+}
+
+.btn-outline {
+    border: 1px solid #3b82f6;
+    padding: 14px 28px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: #3b82f6;
+
+    transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+    background: #3b82f6;
+    color: white;
+    transform: translateY(-3px);
+}
+
+.btn-outline:active {
+    transform: scale(0.96);
+}
+
+/*  OPTIONAL: SMOOTH FADE-IN*/
+.hero-content {
+    animation: fadeUp 1s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

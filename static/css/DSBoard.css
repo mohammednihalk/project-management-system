@@ -1,0 +1,208 @@
+/* =========================
+   TOPBAR
+========================= */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0b1220;
+    padding:15px 20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.dashboard-title{
+    font-size:26px;
+    font-weight:600;
+    color:#e2e8f0;
+}
+
+/* =========================
+   TOP RIGHT ICONS
+========================= */
+.top-icons{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.top-icons img{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #3b82f6;
+}
+
+/* =========================
+   NOTIFICATION BELL
+========================= */
+.bell{
+    position:relative;
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#111827;
+    border:1px solid #1f2937;
+    border-radius:50%;
+    cursor:pointer;
+}
+
+.bell small{
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    background:#ef4444;
+    color:white;
+    padding:3px 6px;
+    border-radius:50%;
+    font-size:10px;
+}
+
+/* =========================
+   DASHBOARD CARDS
+========================= */
+.dashboard-card{
+    border-radius:12px;
+    transition:.3s;
+    cursor:pointer;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+
+/* =========================
+   CHART BOX
+========================= */
+.chart-box{
+    background:#111827;
+    padding:20px;
+    border-radius:14px;
+}
+
+.chart-box h5{
+    margin-bottom:15px;
+    color:#e5e7eb;
+}
+
+/* =========================
+   AI INSIGHTS BOX
+========================= */
+.ai-box{
+    background:#111827;
+    padding:20px;
+    border-radius:14px;
+}
+
+.ai-header{
+    font-size:14px;
+    font-weight:600;
+    color:#e5e7eb;
+    margin-bottom:10px;
+}
+
+/* =========================
+   INSIGHT LIST
+========================= */
+.insight-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.insight-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px;
+    margin-bottom:8px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+.insight-item:hover{
+    background:rgba(255,255,255,.05);
+}
+
+.insight-item .icon{
+    font-size:14px;
+}
+
+.insight-item .text{
+    font-size:13px;
+}
+
+/* COLORS */
+.insight-item.danger{
+    border-left:3px solid #ef4444;
+    color:#f87171;
+}
+
+.insight-item.warning{
+    border-left:3px solid #fbbf24;
+    color:#fbbf24;
+}
+
+.insight-item.success{
+    border-left:3px solid #22c55e;
+    color:#4ade80;
+}
+
+.insight-item.progress{
+    border-left:3px solid #a855f7;
+    color:#c084fc;
+}
+
+.insight-item.info{
+    border-left:3px solid #3b82f6;
+    color:#93c5fd;
+}
+
+.top-insight{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    font-weight:600;
+}
+
+/* =========================
+   AI TOAST
+========================= */
+.ai-toast{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#111827;
+    color:white;
+    padding:12px 16px;
+    border-radius:8px;
+    border-left:4px solid #3b82f6;
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
+    z-index:999;
+}
+
+/* =========================
+   WELCOME BOX
+========================= */
+.welcome-box{
+    background:#1e293b;
+    border-radius:12px;
+}
+
+.welcome-box h4{
+    color:white;
+    margin-bottom:10px;
+}
+
+.welcome-box p{
+    color:#93c5fd;
+}
+a,
+a:hover,
+a:focus,
+a:visited {
+    text-decoration: none !important;
+}

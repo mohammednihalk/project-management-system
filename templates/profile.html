@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- TOPBAR -->
+<div class="topbar">
+
+    <h1>My Profile</h1>
+
+    <div class="top-icons">
+
+        <span class="bell"
+              onclick="window.location.href='{% url 'notification' %}'">
+            🔔
+            {% if unread_count > 0 %}
+                <small>{{ unread_count }}</small>
+            {% endif %}
+        </span>
+
+        {% if user.profile_image %}
+            <img src="{{ user.profile_image.url }}" alt="Profile">
+        {% else %}
+            <img src="{% static 'img/default.png' %}" alt="Profile">
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- SUCCESS MESSAGES -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+
+        <div class="profile-left">
+
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}"
+                     class="profile-img"
+                     alt="Profile Image">
+            {% else %}
+                <img src="{% static 'img/default.png' %}"
+                     class="profile-img"
+                     alt="Profile Image">
+            {% endif %}
+
+            <div class="profile-info">
+
+                <h2>{{ user.username }}</h2>
+
+                <p>{{ user.email }}</p>
+
+                <label for="uploadPhoto" class="change-btn">
+                    Change Photo
+                </label>
+
+                <input type="file"
+                       name="profile_image"
+                       id="uploadPhoto"
+                       hidden>
+
+                <p id="previewText" class="preview-text">
+                    Preview selected (click Save Changes)
+                </p>
+
+            </div>
+
+        </div>
+
+        <button type="submit" class="save-btn">
+            Save Changes
+        </button>
+
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- GENERAL INFORMATION -->
+        <div class="form-section">
+
+            <h3>General Information</h3>
+
+            <label>Username</label>
+            <p>{{ user.username }}</p>
+
+            <label>Email Address</label>
+            <p>{{ user.email }}</p>
+
+            <label>Role</label>
+            <input type="text"
+                   name="role"
+                   placeholder="Developer, Designer, Manager..."
+                   value="{{ user.role }}">
+
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="notification-card">
+
+            <h3>Notifications</h3>
+
+            <div class="toggle">
+
+                <div>
+                    <p>Email Notifications</p>
+                    <small>Receive updates by email</small>
+                </div>
+
+                <input type="checkbox">
+
+            </div>
+
+            <div class="toggle">
+
+                <div>
+                    <p>App Notifications</p>
+                    <small>Receive in-app notifications</small>
+                </div>
+
+                <input type="checkbox">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+<script>
+const uploadPhoto = document.getElementById("uploadPhoto");
+
+uploadPhoto.addEventListener("change", function(e) {
+
+    const file = e.target.files[0];
+
+    if (file) {
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            document.querySelector(".profile-img").src =
+                event.target.result;
+
+            document.getElementById("previewText").style.display =
+                "block";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+window.addEventListener("load", function() {
+    document.getElementById("previewText").style.display = "none";
+});
+</script>
+
+{% endblock %}

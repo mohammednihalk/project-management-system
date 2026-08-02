@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/notification.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Success Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-message">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Topbar -->
+<div class="topbar">
+
+    <h1>Notifications</h1>
+
+    <div class="top-icons">
+
+        <span class="bell"
+              onclick="window.location.href='{% url 'notification' %}'">
+            🔔
+            {% if unread_count > 0 %}
+                <small>{{ unread_count }}</small>
+            {% endif %}
+        </span>
+
+        <a href="{% url 'profile' %}">
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="Profile">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" alt="Profile">
+            {% endif %}
+        </a>
+
+    </div>
+
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+
+    <a href="{% url 'notification' %}"
+       class="{% if not filter_type %}active{% endif %}">
+        All
+    </a>
+
+    <a href="?type=project"
+       class="{% if filter_type == 'project' %}active{% endif %}">
+        Projects ({{ counts.project }})
+    </a>
+
+    <a href="?type=deadline"
+       class="{% if filter_type == 'deadline' %}active{% endif %}">
+        Deadlines ({{ counts.deadline }})
+    </a>
+
+    <a href="?type=update"
+       class="{% if filter_type == 'update' %}active{% endif %}">
+        Updates ({{ counts.update }})
+    </a>
+
+    <a href="?type=delete"
+       class="{% if filter_type == 'delete' %}active{% endif %}">
+        Deleted ({{ counts.delete }})
+    </a>
+
+</div>
+
+<!-- Notifications List -->
+{% for n in notifications %}
+
+<div class="notification-card
+     {% if n.type == 'admin' %}admin-card{% endif %}"
+     onclick="openNotification(
+         {{ n.id }},
+         {% if n.project %}{{ n.project.id }}{% else %}null{% endif %},
+         '{{ n.type }}'
+     )">
+
+    <!-- Icon -->
+    <div class="icon
+        {% if n.type == 'project' %}green
+        {% elif n.type == 'deadline' %}red
+        {% elif n.type == 'delete' %}red
+        {% elif n.type == 'admin' %}admin-icon
+        {% else %}blue
+        {% endif %}">
+
+        {% if n.type == 'project' %}
+            🚀
+        {% elif n.type == 'deadline' %}
+            📅
+        {% elif n.type == 'delete' %}
+            🗑
+        {% elif n.type == 'admin' %}
+            📢
+        {% else %}
+            🔄
+        {% endif %}
+
+    </div>
+
+    <!-- Content -->
+    <div class="text">
+
+        {% if n.type == 'admin' %}
+            <span class="admin-badge">
+                ADMIN
+            </span>
+        {% endif %}
+
+        <h4>{{ n.title }}</h4>
+        <p>{{ n.message }}</p>
+
+    </div>
+
+    <!-- Time -->
+    <span class="time">
+        {{ n.created_at|timesince }} ago
+    </span>
+
+    <!-- Unread Dot -->
+    {% if not n.is_read %}
+        <span class="dot"></span>
+    {% endif %}
+
+</div>
+
+{% empty %}
+
+<div class="empty-state">
+    <h3>No Notifications</h3>
+    <p>You don't have any notifications yet.</p>
+</div>
+
+{% endfor %}
+
+<script>
+function openNotification(id, projectId, type){
+
+    let currentUrl = window.location.pathname + window.location.search;
+    let nextUrl;
+
+    if(type === "delete"){
+        nextUrl = "{% url 'notification' %}?deleted=true";
+    }
+    else if(projectId){
+        nextUrl = "/project/" + projectId + "/";
+    }
+    else{
+        nextUrl = currentUrl;
+    }
+
+    window.location.href =
+        "/mark-read/" + id +
+        "/?next=" + encodeURIComponent(nextUrl);
+}
+</script>
+
+{% endblock %}

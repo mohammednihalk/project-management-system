@@ -1,0 +1,160 @@
+/* ===== BODY BACKGROUND ===== */
+body {
+    background: radial-gradient(circle at 20% 30%, #3b82f6 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, #9333ea 0%, transparent 25%),
+                linear-gradient(120deg, #0f172a, #020617);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Glow effects */
+body::before {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: #3b82f6;
+    filter: blur(150px);
+    top: -100px;
+    left: -100px;
+    opacity: 0.3;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: #9333ea;
+    filter: blur(150px);
+    bottom: -100px;
+    right: -100px;
+    opacity: 0.3;
+}
+
+/* ===== CARD ===== */
+.form-card {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== INPUT ===== */
+.form-control {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+.form-control:focus {
+    background: #1e293b;
+    color: white;
+    border: 1px solid #3b82f6;
+    box-shadow: 0 0 10px rgba(59,130,246,0.4);
+}
+
+/* ===== LABEL ===== */
+.form-label {
+    color: #cbd5f5;
+    font-weight: 500;
+}
+
+/* ===== BUTTON ===== */
+.btn-create {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-create:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 20px #3b82f6;
+}
+
+/* ===== DROP AREA ===== */
+.drop-area {
+    border: 2px dashed #3b82f6;
+    padding: 25px;
+    text-align: center;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.drop-area:hover {
+    background: rgba(59,130,246,0.1);
+    border-color: #60a5fa;
+}
+
+/* SUCCESS STATE */
+.drop-area.success {
+    border-color: #22c55e;
+    background: rgba(34,197,94,0.1);
+    box-shadow: 0 0 15px rgba(34,197,94,0.4);
+}
+
+/* ===== DATE INPUT FIX (IMPORTANT) ===== */
+input[type="date"] {
+    color-scheme: dark;
+    position: relative;
+    z-index: 9999;
+}
+
+/* Show calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+/* Bootstrap override */
+.form-control[type="date"] {
+    background-color: #1e293b;
+    color: white;
+}
+
+/* Ensure focus shows above all */
+input[type="date"]:focus {
+    z-index: 9999;
+}
+
+/* Prevent layout overlap */
+.row {
+    position: relative;
+    z-index: 1;
+}
+/* OPTIONAL LABEL */
+.optional {
+    color: #6b7280;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* HELPER TEXT */
+.helper-text {
+    color: #6b7280;
+    font-size: 12px;
+}
+.form-label::after {
+    content: " *";
+    color: red;
+}

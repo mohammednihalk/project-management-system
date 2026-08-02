@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Description{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/edit_project.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <h2 class="page-title">Edit Description</h2>
+
+    <div class="top-icons">
+        <span class="bell" onclick="window.location.href='{% url 'notification' %}'">
+            🔔
+            {% if unread_count > 0 %}
+                <small>{{ unread_count }}</small>
+            {% endif %}
+        </span>
+
+        <a href="{% url 'profile' %}">
+            {% if user.profile_image %}
+    <img src="{{ user.profile_image.url }}" class="profile-img">
+    {% else %}
+    <img src="{% static 'img/default.png' %}" class="profile-img">
+    {% endif %}
+        </a>
+    </div>
+</div>
+
+<!-- PROJECT HEADER -->
+<div class="project-header">
+    <h1>{{ project.project_name }}</h1>
+</div>
+
+<!-- FORM -->
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Description</h3>
+
+            <button type="button"
+                    class="btn-secondary"
+                    onclick="improveText()">
+                ✨ Improve
+            </button>
+        </div>
+
+        <textarea
+            name="description"
+            class="edit-textarea"
+            placeholder="Write your project description here..."
+        >{{ project.project_description }}</textarea>
+
+    </div>
+
+    <div class="action-buttons">
+
+        <a href="{% url 'project_detail' project.id %}"
+           class="btn-back">
+            ← Back
+        </a>
+
+        <button type="submit" class="btn-save">
+            💾 Save Changes
+        </button>
+
+    </div>
+
+</form>
+
+<!-- AI POPUP -->
+<div id="popup" class="popup">
+
+    <div class="popup-content">
+
+        <h3>Improved Description</h3>
+
+        <pre id="aiResult"></pre>
+
+        <div class="popup-actions">
+            <button type="button" class="btn-save" onclick="applyAI()">
+                Apply
+            </button>
+
+            <button type="button" class="btn-back" onclick="closeAI()">
+                Cancel
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+let aiText = "";
+
+function improveText() {
+
+    const textarea = document.querySelector(".edit-textarea");
+    const text = textarea.value;
+
+    if (!text.trim()) {
+        alert("Write something first!");
+        return;
+    }
+
+    fetch("/improve-description/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ text: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        aiText = data.result;
+
+        document.getElementById("aiResult").innerText = aiText;
+        document.getElementById("popup").style.display = "flex";
+    });
+}
+
+function applyAI() {
+    document.querySelector(".edit-textarea").value += "\n\n" + aiText;
+    closeAI();
+}
+
+function closeAI() {
+    document.getElementById("popup").style.display = "none";
+}
+</script>
+
+{% endblock %}

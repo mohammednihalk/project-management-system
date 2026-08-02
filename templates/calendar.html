@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<!-- Topbar -->
+
+<div class="topbar">
+
+<h1>Calendar</h1>
+
+<div class="top-icons">
+
+    <span class="bell"
+          onclick="window.location.href='{% url 'notification' %}'">
+        🔔
+        {% if unread_count > 0 %}
+            <small>{{ unread_count }}</small>
+        {% endif %}
+    </span>
+
+    <a href="{% url 'profile' %}">
+        {% if user.profile_image %}
+            <img src="{{ user.profile_image.url }}" alt="Profile">
+        {% else %}
+            <img src="{% static 'img/default.png' %}" alt="Profile">
+        {% endif %}
+    </a>
+
+</div>
+
+</div>
+
+<!-- Calendar Controls -->
+
+<div class="calendar-header">
+
+
+<div class="left-controls">
+    <button id="prevBtn">◀</button>
+    <button id="todayBtn">Today</button>
+    <button id="nextBtn">▶</button>
+</div>
+
+<h2 id="calendarTitle"></h2>
+
+<div class="right-controls">
+    <button class="month-btn">Month</button>
+    <button class="year-btn">Year</button>
+    <button class="add-btn">Add Event</button>
+</div>
+
+
+</div>
+
+<!-- Calendar -->
+
+<div id="calendar"></div>
+
+<!-- Add Event Modal -->
+
+<div id="eventModal" class="modal">
+
+
+<div class="modal-content">
+
+    <h3>Add Event</h3>
+
+    <input type="text"
+           id="eventTitle"
+           placeholder="Event Title">
+
+    <input type="date"
+           id="eventDate">
+
+    <div class="modal-buttons">
+        <button id="saveEvent">Save</button>
+        <button id="closeModal">Cancel</button>
+    </div>
+
+</div>
+
+
+</div>
+
+<!-- Edit Event Modal -->
+
+<div id="actionModal" class="modal">
+
+
+<div class="modal-content">
+
+    <h3>Edit Event</h3>
+
+    <input type="text" id="editTitle">
+    <input type="date" id="editDate">
+
+    <div class="modal-buttons">
+        <button id="updateEvent">Update</button>
+        <button id="deleteEventBtn">Delete</button>
+        <button id="closeActionModal">Cancel</button>
+    </div>
+
+</div>
+
+
+</div>
+
+<script>
+const eventsData = JSON.parse('{{ events|escapejs }}');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script src="{% static 'js/calendar.js' %}"></script>
+
+{% endblock %}

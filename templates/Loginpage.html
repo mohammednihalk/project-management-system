@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Login</title>
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+</head>
+
+<body>
+
+<div class="bg-container">
+
+    <!-- LOGIN BOX -->
+    <div class="login-box">
+
+        <h2>Project Management</h2>
+
+        {% if error %}
+        
+        <p style="color:red; margin-bottom:10px;">
+            {{ error }}
+        </p>
+        {% endif %}
+
+
+        <form method="post" action="{% url "loginpage" %}">
+        {% csrf_token %}
+            
+            <!-- EMAIL -->
+            <div class="input-box">
+                <i class="bi bi-envelope icon"></i>
+                <input type="email" name="email" placeholder="Email">
+            </div>
+
+            
+            <div class="input-box">
+                <i class="bi bi-lock icon"></i>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+
+            
+            <div class="options">
+                <label>
+                    <input type="checkbox"> Remember me
+                </label>
+
+                <a href="{% url 'forgot_password' %}">Forgot password?</a>
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit">Log In</button>
+
+<!-- SIGNUP SECTION -->
+<div class="signup-box">
+    <p>Don't have an account?</p>
+    <a href="{% url 'signup' %}" class="signup-btn">Create Account</a>
+</div>
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
